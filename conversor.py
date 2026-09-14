@@ -33,7 +33,7 @@ def hertz_to_rad(h):
 def history(value, origin, result, target):
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open("history.txt", "a", encoding="utf-8") as file:
-        file.write({now} | f"{value} {origin} -> {result:.2f} {target}\n")
+        file.write(f"{now} | {value} {origin} = {result:.2f} {target}\n")
 
 
 def show_history():
@@ -60,8 +60,8 @@ def show_menu():
     print("=== Unit converter ===")
     for key, (origin, target, func) in CONVERSIONS.items():
         print(f"{key}) {origin} → {target}")
-    print("0) Exit")
     print("h) History")
+    print("0) Exit")
 
 
 def ask_num(message):
