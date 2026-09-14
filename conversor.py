@@ -1,4 +1,5 @@
 import math
+from datetime import datetime
 
 
 def celsius_to_fahrenheit(c):
@@ -29,6 +30,21 @@ def hertz_to_rad(h):
     return h * 2 * math.pi
 
 
+def history(value, origin, result, target):
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open("history.txt", "a", encoding="utf-8") as file:
+        file.write({now} | f"{value} {origin} -> {result:.2f} {target}\n")
+
+
+def show_history():
+    try:
+        with open("history.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                print(line, end="")
+    except FileNotFoundError:
+        print("No history yet")
+
+
 CONVERSIONS = {
     "1": ("°C", "°F", celsius_to_fahrenheit),
     "2": ("°F", "°C", fahrenheit_to_celsius),
@@ -45,6 +61,7 @@ def show_menu():
     for key, (origin, target, func) in CONVERSIONS.items():
         print(f"{key}) {origin} → {target}")
     print("0) Exit")
+    print("h) History")
 
 
 def ask_num(message):
@@ -63,6 +80,10 @@ while True:
         print("Bye :)")
         break
 
+    if option == "h":
+        show_history()
+        continue
+
     if option not in CONVERSIONS:
         print("Invalid option")
         continue
@@ -71,3 +92,4 @@ while True:
     value = ask_num(f"Value in {origin}: ")
     result = func(value)
     print(f"{value} {origin} = {result:.2f} {target}")
+    history(value, origin, result, target)
